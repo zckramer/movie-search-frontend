@@ -3,10 +3,10 @@ import axios from 'axios';
 
 import MovieCard from './MovieCard';
 
-const Main = (props) => {
+const Main = () => {
     const [inputValue, setInputValue] = useState('');
     const [didLoadData, setDidLoadData] = useState(false);
-    const [searchData, setSearchData] = useState();
+    const [searchData, setSearchData] = useState({});
     
     const baseURL = 'http://localhost:9000/film/'
     const searchString = inputValue;

@@ -6,17 +6,16 @@ const MovieCard = (props) => {
             </div>
             <div className="Movie-Card__Main">
                 <ul className="Movie-Card__Main__Cast-List">
-                    {props.cast.map(actor=> 
-                        <li className="Movie-Card__Main__Cast-List-Item">{actor.actor}, as {actor.character}</li>
+                    {props.cast.map((actor, index) => 
+                        <li className="Movie-Card__Main__Cast-List-Item" key={("actorList" + index)}>{actor.actor}, as {actor.character}</li>
                     )}
                 </ul>
                 <div className="Movie-Card__Main__Info">
                     <p>Release year: {props.releaseyear}</p>
                     <p>Feature length: {props.length}</p>
                     <p>{props.plot}</p>
-
                 </div>
-                <img className="Movie-Card__Main__Poster" src={props.poster} alt="This movie's primary poster image"/>
+                <img className="Movie-Card__Main__Poster" src={props.poster} alt="This movie's primary poster"/>
             </div>
         </div>
     )
