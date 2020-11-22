@@ -2,39 +2,70 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import MovieCard from './MovieCard';
+import Sidebar from './Sidebar';
 
 const Main = () => {
     const [inputValue, setInputValue] = useState('');
-    const [didLoadData, setDidLoadData] = useState(false);
-    const [searchData, setSearchData] = useState({});
-    const [instructions, setInstructions] = useState(<div>Enter a movie title</div>)
+
+    const [searchDataFilm, setSearchDataFilm] = useState({});
+    const [filmDidLoad, setFilmDidLoad] = useState(false);
+
+    const [searchDataSearch, setSearchDataSearch] = useState({});
+    const [searchDidLoad, setSearchDidLoad] = useState(false);
     
-    const baseURL = 'http://localhost:9000/film/'
+    const [instructions, setInstructions] = useState(<div>Enter a movie title</div>);
+    
+    const baseURL = 'http://localhost:9000/';
+    const filmURL = 'film/';
+    const searchURL = 'search/';
     const searchString = inputValue;
-    const searchQuery = baseURL + searchString;
+    const searchQueryFilm = baseURL + filmURL + searchString;
+    const searchQuerySearch = baseURL + searchURL + searchString;
 
     function handleChangeInput (event) {
         setInputValue(event.target.value)
         // console.log(inputValue)
     }
 
-    function handleReceivePromise (responseData) {
-        setSearchData(responseData);
-        setDidLoadData(true);
+    function handleReceivePromise (responseData, destination) {
+        if (destination === "film") {
+            setSearchDataFilm(responseData);
+            setFilmDidLoad(true);
+        } else if (destination === "search") {
+            setSearchDataSearch(responseData)
+            setSearchDidLoad(true);
+        }
+
     }
 
     function handleInputSubmit (event) {
         event.preventDefault();
-        console.log("get request at : " + searchQuery)
+        // console.log("get request at : " + searchQueryFilm)
         setInstructions(<div>Wait for it..!</div>)
+        handleFilmSubmit();
+        handleSearchSubmit();
+    }  
+
+    function handleFilmSubmit () {
         if (inputValue !== "") {
-            axios.get(searchQuery)
-                .then(res => handleReceivePromise(res.data.data))
+            axios.get(searchQueryFilm)
+                .then(res => handleReceivePromise(res.data.data, "film"))
                 .catch(err=>console.error(err))
         } else {
             setInstructions(<div>Invalid search</div>)
         }
-    }  
+    }
+
+    function handleSearchSubmit () {
+        if (inputValue !== "") {
+            axios.get(searchQuerySearch)
+                .then(res => handleReceivePromise(res.data.data.titles, "search"))
+                .catch(err=>console.error(err))
+        } else {
+            setInstructions(<div>Invalid search</div>)
+        }
+
+    }
 
     return (
         <main className="Main">
@@ -55,14 +86,15 @@ const Main = () => {
                     Submit
                 </button>
             </form>
-            {didLoadData ? console.log("searchData state = ", searchData) : ""}
-            {didLoadData ? <MovieCard 
-                                title={searchData.title} 
-                                cast={searchData.cast} 
-                                poster={searchData.poster} 
-                                releaseyear={searchData.year}
-                                length={searchData.length}
-                                plot={searchData.plot}
+            {searchDidLoad ? <Sidebar searchData={searchDataSearch} /> : "sidebar"}
+            {/* {filmDidLoad ? console.log("searchData state = ", searchDataFilm) : ""} */}
+            {filmDidLoad ? <MovieCard 
+                                title={searchDataFilm.title} 
+                                cast={searchDataFilm.cast} 
+                                poster={searchDataFilm.poster} 
+                                releaseyear={searchDataFilm.year}
+                                length={searchDataFilm.length}
+                                plot={searchDataFilm.plot}
                             /> : <div>{instructions}</div>
             }
         </main>
