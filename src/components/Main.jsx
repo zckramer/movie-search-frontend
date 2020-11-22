@@ -23,8 +23,10 @@ const Main = () => {
     const searchQuerySearch = baseURL + searchURL + searchString;
 
     function handleChangeInput (event) {
-        setInputValue(event.target.value)
-        // console.log(inputValue)
+        setInputValue(event.target.value);
+        setFilmDidLoad(false);
+        setSearchDidLoad(false);
+        setInstructions(<div>Enter a movie title</div>);
     }
 
     function handleReceivePromise (responseData, destination) {
@@ -64,7 +66,6 @@ const Main = () => {
         } else {
             setInstructions(<div>Invalid search</div>)
         }
-
     }
 
     return (
@@ -86,7 +87,7 @@ const Main = () => {
                     Submit
                 </button>
             </form>
-            {searchDidLoad ? <Sidebar searchData={searchDataSearch} /> : "sidebar"}
+            {searchDidLoad ? <Sidebar searchData={searchDataSearch} /> : ""}
             {/* {filmDidLoad ? console.log("searchData state = ", searchDataFilm) : ""} */}
             {filmDidLoad ? <MovieCard 
                                 title={searchDataFilm.title} 
