@@ -37,7 +37,6 @@ const Main = () => {
             setSearchDataSearch(responseData)
             setSearchDidLoad(true);
         }
-
     }
 
     function handleInputSubmit (event) {
