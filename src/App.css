@@ -4,7 +4,7 @@
   align-items: center;
   flex-direction: row;
   height: 10vmin;
-
+  color: blueviolet;
 }
 
 .Header__Logo {
@@ -27,7 +27,7 @@ hr {
 }
 
 .App {
-  background-color: #202a3f;
+  background-color: black;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
   color: white;

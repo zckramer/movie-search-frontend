@@ -1,24 +1,39 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const Main = () => {
+import MovieCard from './MovieCard';
+
+const Main = (props) => {
     const [inputValue, setInputValue] = useState('');
-    const [didSearch, setDidSearch] = useState(false);
-    const [searchData, setSearchData] = useState({});
+    const [didLoadData, setDidLoadData] = useState(false);
+    const [searchData, setSearchData] = useState();
     
+    const baseURL = 'http://localhost:9000/film/'
+    const searchString = inputValue;
+    const searchQuery = baseURL + searchString;
+
     function handleChangeInput (event) {
         setInputValue(event.target.value)
-        console.log(inputValue)
+        // console.log(inputValue)
     }
 
-    function handleInputSubmit () {
-        console.log(inputValue)
-        
+    function handleReceivePromise (responseData) {
+        setSearchData(responseData);
+        setDidLoadData(true);
+    }
+
+    function handleInputSubmit (event) {
+        event.preventDefault();
+        console.log("get request at : " + searchQuery)
+        axios.get(searchQuery)
+            .then(res => handleReceivePromise(res.data.data))
+            .catch(err=>console.error(err))
     }  
 
     return (
         <main className="Main">
             <h2>xX Movie Search 3000 Xx</h2>
-            <form className="Input-Form" onSubmit={(event)=>event.preventDefault()}>
+            <form className="Input-Form" onSubmit={event => handleInputSubmit(event, inputValue)}>
                 <input 
                     id="inputField"
                     className="Input-Form__Input"
@@ -29,13 +44,20 @@ const Main = () => {
                 />
                 <button // this submission form isn't working yet...
                     className="Input-Form__Submit-Button"
-                    onClick={()=>handleInputSubmit}
-                    ref={document.getElementById("inputField")}>
+                    type='submit'
+                >
                     Submit
                 </button>
             </form>
-            <hr />
-            {didSearch ? searchData : "This is going to be sweet..!"}
+            {didLoadData ? console.log("searchData state = ", searchData) : "Wait for it..."}
+            {didLoadData ? <MovieCard 
+                                title={searchData.title} 
+                                cast={searchData.cast} 
+                                poster={searchData.poster} 
+                                releaseyear={searchData.year}
+                                length={searchData.length}
+                                plot={searchData.plot}
+                            /> : "Wait for it..."}
         </main>
     )
 }
