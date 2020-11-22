@@ -7,6 +7,7 @@ const Main = () => {
     const [inputValue, setInputValue] = useState('');
     const [didLoadData, setDidLoadData] = useState(false);
     const [searchData, setSearchData] = useState({});
+    const [instructions, setInstructions] = useState(<div>Enter a movie title</div>)
     
     const baseURL = 'http://localhost:9000/film/'
     const searchString = inputValue;
@@ -25,9 +26,14 @@ const Main = () => {
     function handleInputSubmit (event) {
         event.preventDefault();
         console.log("get request at : " + searchQuery)
-        axios.get(searchQuery)
-            .then(res => handleReceivePromise(res.data.data))
-            .catch(err=>console.error(err))
+        setInstructions(<div>Wait for it..!</div>)
+        if (inputValue !== "") {
+            axios.get(searchQuery)
+                .then(res => handleReceivePromise(res.data.data))
+                .catch(err=>console.error(err))
+        } else {
+            setInstructions(<div>Invalid search</div>)
+        }
     }  
 
     return (
@@ -49,7 +55,7 @@ const Main = () => {
                     Submit
                 </button>
             </form>
-            {didLoadData ? console.log("searchData state = ", searchData) : "Wait for it..."}
+            {didLoadData ? console.log("searchData state = ", searchData) : ""}
             {didLoadData ? <MovieCard 
                                 title={searchData.title} 
                                 cast={searchData.cast} 
@@ -57,7 +63,8 @@ const Main = () => {
                                 releaseyear={searchData.year}
                                 length={searchData.length}
                                 plot={searchData.plot}
-                            /> : "Wait for it..."}
+                            /> : <div>{instructions}</div>
+            }
         </main>
     )
 }
