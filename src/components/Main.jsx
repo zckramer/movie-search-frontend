@@ -80,7 +80,7 @@ const Main = () => {
                     onChange={(event)=>{handleChangeInput(event)}}
                     value={inputValue}
                 />
-                <button // this submission form isn't working yet...
+                <button 
                     className="Input-Form__Submit-Button"
                     type='submit'
                 >
@@ -88,7 +88,6 @@ const Main = () => {
                 </button>
             </form>
             {searchDidLoad ? <Sidebar searchData={searchDataSearch} /> : ""}
-            {/* {filmDidLoad ? console.log("searchData state = ", searchDataFilm) : ""} */}
             {filmDidLoad ? <MovieCard 
                                 title={searchDataFilm.title} 
                                 cast={searchDataFilm.cast} 

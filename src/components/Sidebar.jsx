@@ -7,7 +7,7 @@ const Sidebar = (props) => {
     return (
         <div className={"Sidebar"}>
             possible matches:
-            {titleList.map(title=><div movieid={title.id}>{title.title}</div>)}
+            {titleList.map((title, index)=><div key={"sidebarSearchItem" + index} movieid={title.id}>{title.title}</div>)}
         </div>
     )
 }
