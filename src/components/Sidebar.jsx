@@ -6,8 +6,7 @@ const Sidebar = (props) => {
     // console.log(titleList)
     return (
         <div className={"Sidebar"}>
-            possible matches:
-            {titleList.map((title, index)=><div key={"sidebarSearchItem" + index} movieid={title.id}>{title.title}</div>)}
+            {titleList.map((title, index)=><p key={"sidebarSearchItem" + index} movieid={title.id}>{title.title}</p>)}
         </div>
     )
 }

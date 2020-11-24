@@ -41,7 +41,6 @@ const Main = () => {
 
     function handleInputSubmit (event) {
         event.preventDefault();
-        // console.log("get request at : " + searchQueryFilm)
         setInstructions(<div>Wait for it..!</div>)
         handleFilmSubmit();
         handleSearchSubmit();
@@ -86,7 +85,6 @@ const Main = () => {
                     Submit
                 </button>
             </form>
-            {searchDidLoad ? <Sidebar searchData={searchDataSearch} /> : ""}
             {filmDidLoad ? <MovieCard 
                                 title={searchDataFilm.title} 
                                 cast={searchDataFilm.cast} 
@@ -94,8 +92,9 @@ const Main = () => {
                                 releaseyear={searchDataFilm.year}
                                 length={searchDataFilm.length}
                                 plot={searchDataFilm.plot}
-                            /> : <div>{instructions}</div>
+                                /> : <div>{instructions}</div>
             }
+            {searchDidLoad ? <div className="Sidebar-Container">Not what you're looking for? Try...<Sidebar searchData={searchDataSearch} /></div>  : ""}
         </main>
     )
 }

@@ -3,23 +3,32 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  height: 10vmin;
-  color: blueviolet;
+  height: 5vmin;
+  color: palegoldenrod;
+  background-color: darkred;
+  border-bottom: 4px double black;
 }
 
 .Header__Logo {
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 800;
   margin-left: 2rem;
   padding: .25rem;
 }
 
 .Header__Item {
   font-size: 2rem;
-  font-weight: lighter;
+  font-weight: 200;
   margin-left: 2rem;
   margin-right: 2rem;
+  transform: absolute;
   padding: .25rem;
+  min-width: 150px;
+  transition: font-size .125s;
+}
+
+.Header__Item:hover {
+  font-size: 2.1rem;        
 }
 
 hr {
@@ -31,6 +40,75 @@ hr {
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Movie-Card {
+  display: grid;
+  // grid-template-rows: 5% 15% auto;
+  grid-template-columns: 50% 47% auto;
+  align-items: stretch;
+  // border: 2px solid white;
+  margin: 2rem;
+
+  font-weight: 200;
+  font-size: 18pt;
+
+  p {
+    font-size: 14pt;
+  }
+  
+  img{
+    width: 400px;
+    height: 600px;
+  }
+
+  li{
+    list-style-type: none;
+    margin-left: 1rem;
+    font-size: 18pt;
+    font-weight: 180;
+    
+  }
+  
+  h3{
+    padding: .5rem;
+    font-weight: 600;
+    letter-spacing: .1rem;
+  }
+
+  .upvote {
+    display:flex;
+    border: 1px solid white;
+    width: 30px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .downvote {
+    display:flex;
+    border: 1px solid white;
+    width: 30px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.Sidebar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid white;
+}
+
+.Sidebar-Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 90vw;
+  font-size: 12pt;
+  font-weight: 80;
 }
 
 a {
