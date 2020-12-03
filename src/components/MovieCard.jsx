@@ -1,4 +1,8 @@
+import { useState } from 'react';
+
 const MovieCard = (props) => {
+
+
     return (
         <div className="Movie-Card">
             <div className="Movie-Card__Header">
@@ -18,8 +22,8 @@ const MovieCard = (props) => {
                 </div>
             </div>
             <div className="Movie-Card__Vote-Area">
-                <div className="upvote">^</div>
-                <div className="downvote">v</div>
+                    <div className="upvote" onClick={()=>console.log("UPVOTE")}>^{props.upvotes}</div>
+                    <div className="downvote" onClick={()=>console.log("DOWNVOTE")}>v{props.downvotes}</div>
             </div>
         </div>
     )

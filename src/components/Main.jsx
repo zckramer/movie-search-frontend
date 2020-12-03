@@ -3,9 +3,12 @@ import axios from 'axios';
 
 import MovieCard from './MovieCard';
 import Sidebar from './Sidebar';
+import model from './model';
 
 const Main = () => {
     const [inputValue, setInputValue] = useState('');
+
+    const [userVoteData, setUserVoteData] = useState(model);
 
     const [searchDataFilm, setSearchDataFilm] = useState({});
     const [filmDidLoad, setFilmDidLoad] = useState(false);
@@ -29,10 +32,28 @@ const Main = () => {
         setInstructions(<div>Enter a movie title</div>);
     }
 
+    async function handleSetVoteData (movieID) {
+        const response = await axios.get(baseURL + "db/" + movieID) 
+    
+        if (response.status === 200){
+            const voteData = response.data;
+            voteData["id"] = movieID;
+            setUserVoteData(voteData);
+
+        } else {
+            const voteData = model;
+            model["id"] = movieID;
+            setUserVoteData(voteData);
+        }
+            console.log(response.data)
+    }
+
     function handleReceivePromise (responseData, destination) {
         if (destination === "film") {
             setSearchDataFilm(responseData);
+            handleSetVoteData(responseData.id) // need to handle no data / 404s
             setFilmDidLoad(true);
+            console.log(userVoteData)
         } else if (destination === "search") {
             setSearchDataSearch(responseData)
             setSearchDidLoad(true);
@@ -92,11 +113,13 @@ const Main = () => {
                                 releaseyear={searchDataFilm.year}
                                 length={searchDataFilm.length}
                                 plot={searchDataFilm.plot}
+                                upvotes={userVoteData.voteData.upvote}
+                                downvotes={userVoteData.voteData.downvote}
                                 /> : <div>{instructions}</div>
             }
             {searchDidLoad ? <div className="Sidebar-Container">Not what you're looking for? Try...<Sidebar searchData={searchDataSearch} /></div>  : ""}
         </main>
     )
 }
-
+// ["voteData"]["downvotes"]
 export default Main;
