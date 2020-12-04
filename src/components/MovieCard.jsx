@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 const MovieCard = (props) => {
 
-
     return (
         <div className="Movie-Card">
             <div className="Movie-Card__Header">
@@ -22,8 +21,8 @@ const MovieCard = (props) => {
                 </div>
             </div>
             <div className="Movie-Card__Vote-Area">
-                    <div className="upvote" onClick={()=>console.log("UPVOTE")}>^{props.upvotes}</div>
-                    <div className="downvote" onClick={()=>console.log("DOWNVOTE")}>v{props.downvotes}</div>
+                    <div className="upvote" onClick={()=>props.handlevote("upvote")}>^{props.upvotes}</div>
+                    <div className="downvote" onClick={()=>props.handlevote("downvote")}>v{props.downvotes}</div>
             </div>
         </div>
     )

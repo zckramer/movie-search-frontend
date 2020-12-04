@@ -9,6 +9,7 @@ const Main = () => {
     const [inputValue, setInputValue] = useState('');
 
     const [userVoteData, setUserVoteData] = useState(model);
+    const [filmData, setFilmData] = useState(); // will eventually hold the current movie in memory
 
     const [searchDataFilm, setSearchDataFilm] = useState({});
     const [filmDidLoad, setFilmDidLoad] = useState(false);
@@ -24,6 +25,7 @@ const Main = () => {
     const searchString = inputValue;
     const searchQueryFilm = baseURL + filmURL + searchString;
     const searchQuerySearch = baseURL + searchURL + searchString;
+    const insertRoute = baseURL + "db/insert"
 
     function handleChangeInput (event) {
         setInputValue(event.target.value);
@@ -32,20 +34,30 @@ const Main = () => {
         setInstructions(<div>Enter a movie title</div>);
     }
 
+    async function handleCreateNewMovieInDB (body) {
+        console.log("create new movie in DB!")
+
+        await axios.post(insertRoute, body)
+        .then(console.log("pushed new data to DB: ", body))
+    }
+
     async function handleSetVoteData (movieID) {
         const response = await axios.get(baseURL + "db/" + movieID) 
     
         if (response.status === 200){
-            const voteData = response.data;
+            const voteData = await response.data;
             voteData["id"] = movieID;
+            voteData["title"] = voteData.title;
             setUserVoteData(voteData);
-
+            console.log("handing off GOOD DATA at setUserVoteData...")
         } else {
             const voteData = model;
             model["id"] = movieID;
+            voteData["title"] = voteData.title;
             setUserVoteData(voteData);
+            console.log("handing off an empty object at setUserVoteData...")
         }
-            console.log(response.data)
+            // console.log(response.data)
     }
 
     function handleReceivePromise (responseData, destination) {
@@ -53,7 +65,7 @@ const Main = () => {
             setSearchDataFilm(responseData);
             handleSetVoteData(responseData.id) // need to handle no data / 404s
             setFilmDidLoad(true);
-            console.log(userVoteData)
+            
         } else if (destination === "search") {
             setSearchDataSearch(responseData)
             setSearchDidLoad(true);
@@ -67,11 +79,12 @@ const Main = () => {
         handleSearchSubmit();
     }  
 
-    function handleFilmSubmit () {
+    async function handleFilmSubmit () {
         if (inputValue !== "") {
-            axios.get(searchQueryFilm)
+            await axios.get(searchQueryFilm)
                 .then(res => handleReceivePromise(res.data.data, "film"))
                 .catch(err=>console.error(err))
+                   
         } else {
             setInstructions(<div>Invalid search</div>)
         }
@@ -84,6 +97,38 @@ const Main = () => {
                 .catch(err=>console.error(err))
         } else {
             setInstructions(<div>Invalid search</div>)
+        }
+    }
+
+    async function handleUpdateVote (vote) {
+        // console.log("Movie Data at handleUpdateVote: ", filmData, "...and the vote: ", vote)
+        // console.log("state: userVoteData= ", userVoteData)
+
+        const body = {                              // Build the body...
+                "id": userVoteData["id"],
+                "title": userVoteData["title"],
+                "voteData": {
+                        "upvote": userVoteData["voteData"]["upvote"],
+                        "downvote": userVoteData["voteData"]["downvote"]
+                }
+            }
+        console.log("here's the body: ", body)      // console.log it for confirmation
+
+        const idCheck = await axios.get(baseURL + 'db/' + searchDataFilm.id)    // check if current movie is in DB
+        if (idCheck !== userVoteData.id) {          // if current movie is not in DB..
+            handleCreateNewMovieInDB(body)              // hand body from above to create a new entry in DB
+        }
+
+        if (vote === "upvote") {
+            body["voteData"]["upvote"] = body["voteData"]["upvote"] + 1
+            await axios.patch(baseURL + "db/patch/" + vote, body)
+                
+        } else if (vote === "downvote") {
+            body["voteData"]["downvote"] = body["voteData"]["downvote"] + 1
+            await axios.patch(baseURL + "db/patch/" + vote, body)
+            // .then((res)=>console.log(res))
+        } else {
+            console.log("vote update failed: 'upvote' or 'downvote' are only valid URL params after db/patch/")
         }
     }
 
@@ -115,6 +160,7 @@ const Main = () => {
                                 plot={searchDataFilm.plot}
                                 upvotes={userVoteData.voteData.upvote}
                                 downvotes={userVoteData.voteData.downvote}
+                                handlevote={(vote)=>handleUpdateVote(vote)}
                                 /> : <div>{instructions}</div>
             }
             {searchDidLoad ? <div className="Sidebar-Container">Not what you're looking for? Try...<Sidebar searchData={searchDataSearch} /></div>  : ""}
