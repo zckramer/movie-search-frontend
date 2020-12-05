@@ -39,10 +39,10 @@ const Main = () => {
     }
 
     async function handleCreateNewMovieInDB (body) {
-        console.log("create new movie in DB!")
+        // console.log("create new movie in DB!")
 
         await axios.post(insertRoute, body)
-        .then(console.log("pushed new data to DB: ", body))
+        // .then(console.log("pushed new data to DB: ", body))
     }
 
     async function handleSetVoteData (movieID) {
@@ -103,7 +103,7 @@ const Main = () => {
     }
 
     async function handleUpdateVote (vote) {
-        console.log("userVoteData before building body: ", userVoteData)
+        // console.log("userVoteData before building body: ", userVoteData)
         const body = {                              // Build the body...
                 "id": userVoteData["id"],
                 "title": userVoteData["title"],
@@ -112,7 +112,7 @@ const Main = () => {
                         "downvote": userVoteData["voteData"]["downvote"]
                 }
             }
-        console.log("here's the body: ", body)      // console.log it for confirmation
+        // console.log("here's the body: ", body)      // console.log it for confirmation
 
         // const idCheck = await axios.get(baseURL + 'db/' + searchDataFilm.id)    // check if current movie is in DB
         // if (idCheck.data.id !== userVoteData.id) {          // if current movie is not in DB..
@@ -123,7 +123,7 @@ const Main = () => {
             body["voteData"]["upvote"] = body["voteData"]["upvote"] + 1
             await axios.patch(baseURL + "db/patch/" + vote, body)
             setUserCanVote(false)
-            console.log("userVoteData.id = ", userVoteData.id)
+            // console.log("userVoteData.id = ", userVoteData.id)
             handleSetVoteData(userVoteData.id);
         } else if (vote === "downvote") {
             body["voteData"]["downvote"] = body["voteData"]["downvote"] + 1
@@ -131,7 +131,7 @@ const Main = () => {
             setUserCanVote(false)
             handleSetVoteData(userVoteData.id);
         } else {
-            console.log("vote update failed: 'upvote' or 'downvote' are only valid URL params after db/patch/")
+            // console.log("vote update failed: 'upvote' or 'downvote' are only valid URL params after db/patch/")
 
         }
 
