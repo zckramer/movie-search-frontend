@@ -7,6 +7,7 @@ import model from './model';
 
 const Main = () => {
     const [inputValue, setInputValue] = useState('');
+    const [userCanVote, setUserCanVote] = useState(true);
 
     const [userVoteData, setUserVoteData] = useState(model);
     const [filmData, setFilmData] = useState(); // will eventually hold the current movie in memory
@@ -17,6 +18,8 @@ const Main = () => {
     const [searchDataSearch, setSearchDataSearch] = useState({});
     const [searchDidLoad, setSearchDidLoad] = useState(false);
     
+
+
     const [instructions, setInstructions] = useState(<div>Enter a movie title</div>);
     
     const baseURL = 'http://localhost:9000/';
@@ -32,6 +35,7 @@ const Main = () => {
         setFilmDidLoad(false);
         setSearchDidLoad(false);
         setInstructions(<div>Enter a movie title</div>);
+        setUserCanVote(true);
     }
 
     async function handleCreateNewMovieInDB (body) {
@@ -46,18 +50,16 @@ const Main = () => {
     
         if (response.status === 200){
             const voteData = await response.data;
+            // console.log(voteData)
             voteData["id"] = movieID;
-            voteData["title"] = voteData.title;
+            voteData["title"] = searchDataFilm.title;
             setUserVoteData(voteData);
-            console.log("handing off GOOD DATA at setUserVoteData...")
         } else {
             const voteData = model;
             model["id"] = movieID;
-            voteData["title"] = voteData.title;
+            voteData["title"] = searchDataFilm.title;
             setUserVoteData(voteData);
-            console.log("handing off an empty object at setUserVoteData...")
         }
-            // console.log(response.data)
     }
 
     function handleReceivePromise (responseData, destination) {
@@ -101,9 +103,7 @@ const Main = () => {
     }
 
     async function handleUpdateVote (vote) {
-        // console.log("Movie Data at handleUpdateVote: ", filmData, "...and the vote: ", vote)
-        // console.log("state: userVoteData= ", userVoteData)
-
+        console.log("userVoteData before building body: ", userVoteData)
         const body = {                              // Build the body...
                 "id": userVoteData["id"],
                 "title": userVoteData["title"],
@@ -114,24 +114,29 @@ const Main = () => {
             }
         console.log("here's the body: ", body)      // console.log it for confirmation
 
-        const idCheck = await axios.get(baseURL + 'db/' + searchDataFilm.id)    // check if current movie is in DB
-        if (idCheck !== userVoteData.id) {          // if current movie is not in DB..
+        // const idCheck = await axios.get(baseURL + 'db/' + searchDataFilm.id)    // check if current movie is in DB
+        // if (idCheck.data.id !== userVoteData.id) {          // if current movie is not in DB..
             handleCreateNewMovieInDB(body)              // hand body from above to create a new entry in DB
-        }
+        // }
 
         if (vote === "upvote") {
             body["voteData"]["upvote"] = body["voteData"]["upvote"] + 1
             await axios.patch(baseURL + "db/patch/" + vote, body)
-                
+            setUserCanVote(false)
+            console.log("userVoteData.id = ", userVoteData.id)
+            handleSetVoteData(userVoteData.id);
         } else if (vote === "downvote") {
             body["voteData"]["downvote"] = body["voteData"]["downvote"] + 1
             await axios.patch(baseURL + "db/patch/" + vote, body)
-            // .then((res)=>console.log(res))
+            setUserCanVote(false)
+            handleSetVoteData(userVoteData.id);
         } else {
             console.log("vote update failed: 'upvote' or 'downvote' are only valid URL params after db/patch/")
-        }
-    }
 
+        }
+
+    }
+    
     return (
         <main className="Main">
             <h2>xX Movie Search 3000 Xx</h2>
@@ -158,6 +163,7 @@ const Main = () => {
                                 releaseyear={searchDataFilm.year}
                                 length={searchDataFilm.length}
                                 plot={searchDataFilm.plot}
+                                usercanvote={userCanVote}
                                 upvotes={userVoteData.voteData.upvote}
                                 downvotes={userVoteData.voteData.downvote}
                                 handlevote={(vote)=>handleUpdateVote(vote)}

@@ -20,10 +20,19 @@ const MovieCard = (props) => {
                     <p>{props.plot}</p>
                 </div>
             </div>
-            <div className="Movie-Card__Vote-Area">
-                    <div className="upvote" onClick={()=>props.handlevote("upvote")}>^{props.upvotes}</div>
-                    <div className="downvote" onClick={()=>props.handlevote("downvote")}>v{props.downvotes}</div>
-            </div>
+            {props.usercanvote ? 
+                <div className="Movie-Card__Vote-Area">
+                        <div className="upvote" onClick={()=>props.handlevote("upvote")}>^</div>
+                        <div className="downvote" onClick={()=>props.handlevote("downvote")}>v</div>
+                </div>
+                : ""
+            }
+            {props.usercanvote ? "" : 
+                <div className="Movie-Card__Vote-Area">
+                        <div className="upvote" >{props.upvotes}</div>
+                        <div className="downvote" >{props.downvotes}</div>
+                </div>
+            }
         </div>
     )
 }
