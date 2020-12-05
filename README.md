@@ -9,3 +9,6 @@ I used create-react-app for the front-end, and express-generator for the back-en
 
 demonstration of use:
 https://gyazo.com/e2adc00bd30997096c43315d2c1b29ad
+
+known bugs:
+after up or down voting, the displayed vote count doesn't update properly. You can see the values have changed if you hit "Submit" again and wait for it to reload.
