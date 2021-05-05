@@ -1,22 +1,32 @@
 .Header {
+  position: fixed;
+  width: 100%;
+  height: 5vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  height: 5vmin;
   color: palegoldenrod;
   background-color: darkred;
   border-bottom: 4px double black;
 }
 
-.Header__Logo {
+#Header__Logo {
+  user-select: none;
+  cursor: default;
   font-size: 2.5rem;
   font-weight: 800;
   margin-left: 2rem;
   padding: .25rem;
 }
 
+#Header__Logo:hover{
+  transform: none;
+}
+
 .Header__Item {
+  user-select: none;
+  cursor: pointer;
   font-size: 2rem;
   font-weight: 200;
   margin-left: 2rem;
@@ -24,56 +34,88 @@
   transform: absolute;
   padding: .25rem;
   min-width: 150px;
-  transition: font-size .125s;
+  transition: .25s;
 }
 
 .Header__Item:hover {
-  font-size: 2.1rem;        
-}
-
-hr {
-  width: 90vw;
+  transform: scale(1.1);        
 }
 
 .App {
+  position: fixed;
   background-color: black;
-  min-height: 100vh;
+  min-height: 100%;
+  height: 100%;
+  max-height: 100%;
+  width: 100vw;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
 .Movie-Card {
+  position: absolute;
   display: grid;
-  // grid-template-rows: 5% 15% auto;
-  grid-template-columns: 50% 47% auto;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: 40% 55%;
   align-items: stretch;
-  // border: 2px solid white;
-  margin: 2rem;
-
   font-weight: 200;
   font-size: 18pt;
 
+  .Movie-Card__Main {
+    font-size: 18pt;
+  }
+
+  .Movie-Card__Main__Info{
+    font-size: 12pt;
+    overflow-y: auto;
+  }
+
+  .Movie-Card__Header {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Movie-Card__Header__Title {
+    margin-left: 1rem;
+  }
+
+  .Movie-Card__Header__Poster-Container{
+    display: table;
+  }
+
   p {
-    font-size: 14pt;
+    font-size: 12pt;
   }
   
   img{
+    display: table-cell;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
     width: 400px;
     height: 600px;
   }
-
+  
   li{
     list-style-type: none;
-    margin-left: 1rem;
-    font-size: 18pt;
-    font-weight: 180;
-    
+    font-size: 12pt;
   }
   
   h3{
     padding: .5rem;
     font-weight: 600;
     letter-spacing: .1rem;
+  }
+
+  .Movie-Card__Vote-Area{
+    position: fixed;
+    right: 0;
+    top: 20;
+    margin-right: 1rem;
   }
 
   .upvote {
@@ -94,21 +136,26 @@ hr {
 }
 
 .Sidebar {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  border: 1px solid white;
+  overflow-x: auto;
+  // justify-content: space-around;
+}
+
+.Sidebar__Entry {
+  margin: .25rem;
 }
 
 .Sidebar-Container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 90vw;
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+  width: 60%;
   font-size: 12pt;
   font-weight: 80;
+  transition: .5s;
 }
 
 a {
@@ -120,22 +167,44 @@ input {
 }
 
 main {
+  position: absolute;
+  top: 6%;
+  height: 75vh;
+  width: 100%;
+}
+
+.Main-Content{
+  background-color: black;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding-left: auto;
+  padding-right: auto;
+}
+
+.Input-Form__Container{
+  position: fixed;
+  background-color: black;
+  left: 0;
+  bottom: 0;
+  height: 15%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .Input-Form {
   display: flex;
   flex-direction: column;
   font-weight: lighter;
+  width: 30%;
 }
 
 .Input-Form__Submit-Button {
   font-size: 1.25rem;
   font-weight: bold;
   letter-spacing: 4px;
-  padding: .25rem;
 }
 

@@ -139,37 +139,41 @@ const Main = () => {
     
     return (
         <main className="Main">
-            <h2>xX Movie Search 3000 Xx</h2>
-            <form className="Input-Form" onSubmit={event => handleInputSubmit(event, inputValue)}>
-                <input 
-                    id="inputField"
-                    className="Input-Form__Input"
-                    type="text" 
-                    placeholder="Search for a movie title"
-                    onChange={(event)=>{handleChangeInput(event)}}
-                    value={inputValue}
-                />
-                <button 
-                    className="Input-Form__Submit-Button"
-                    type='submit'
-                >
-                    Submit
-                </button>
-            </form>
-            {filmDidLoad ? <MovieCard 
-                                title={searchDataFilm.title} 
-                                cast={searchDataFilm.cast} 
-                                poster={searchDataFilm.poster} 
-                                releaseyear={searchDataFilm.year}
-                                length={searchDataFilm.length}
-                                plot={searchDataFilm.plot}
-                                usercanvote={userCanVote}
-                                upvotes={userVoteData.voteData.upvote}
-                                downvotes={userVoteData.voteData.downvote}
-                                handlevote={(vote)=>handleUpdateVote(vote)}
-                                /> : <div>{instructions}</div>
-            }
-            {searchDidLoad ? <div className="Sidebar-Container">Not what you're looking for? Try...<Sidebar searchData={searchDataSearch} /></div>  : ""}
+            <div className="Input-Form__Container">
+                <form className="Input-Form" onSubmit={event => handleInputSubmit(event, inputValue)}>
+                    <input 
+                        id="inputField"
+                        className="Input-Form__Input"
+                        type="text" 
+                        placeholder="Search for a movie title"
+                        onChange={(event)=>{handleChangeInput(event)}}
+                        value={inputValue}
+                    />
+                    <button 
+                        className="Input-Form__Submit-Button"
+                        type='submit'
+                    >
+                        Submit
+                    </button>
+                </form>
+                {searchDidLoad ? <div className="Sidebar-Container">Not what you're looking for? Try...<Sidebar searchData={searchDataSearch} /></div>  : ""}
+            </div>
+            <div className="Main-Content">
+                {filmDidLoad ? <MovieCard 
+                                    title={searchDataFilm.title} 
+                                    cast={searchDataFilm.cast} 
+                                    poster={searchDataFilm.poster} 
+                                    releaseyear={searchDataFilm.year}
+                                    length={searchDataFilm.length}
+                                    plot={searchDataFilm.plot}
+                                    usercanvote={userCanVote}
+                                    upvotes={userVoteData.voteData.upvote}
+                                    downvotes={userVoteData.voteData.downvote}
+                                    handlevote={(vote)=>handleUpdateVote(vote)}
+                                    /> : <div id="instructions">{instructions}</div>
+                }
+
+            </div>
         </main>
     )
 }
